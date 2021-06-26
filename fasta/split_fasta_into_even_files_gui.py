@@ -1,36 +1,14 @@
-#!/usr/bin/env python3
-
-"""
-
-If you have a large FASTA file with a great number of entries, this script is used to
-split the file into multiple new files with an even number of records (or as close
-as possible.)
-
-Use case example: I have a reference genome collection with 2000 genomes and want to
-search this using bowtie.  But the bowtie index memory footprint is too large for
-a large search, so I needed to split the reference genome file into 4 even parts
-and index them individually.
-
-Usage example:
-
-./split_fasta_into_even_files.py -i reference_genomes.fna -fc 4
-
-The script uses the same file name as before but appends '.partN' where 'N' is replaced
-by an increasing digit to indicate the file number.
-
-"""
-
-import argparse
+# python3
+from gooey import *
 import os
 import sys
-
+# input parameters
+@Gooey(required_cols=2, program_name= 'split fasta into even files', header_bg_color= '#DCDCDC', terminal_font_color= '#DCDCDC', terminal_panel_color= '#DCDCDC')
 def main():
-    parser = argparse.ArgumentParser( description='Split a large FASTA file into new evenly sized files')
-
-    ## output file to be written
-    parser.add_argument('-i', '--input_file', type=str, required=True, help='Path to an input FASTA file to be read' )
+    parser = GooeyParser( description='Split a large multi-FASTA file into new evenly sized files')
+    parser.add_argument('-i', '--input_file', type=str, required=True, widget='FileChooser', help='Path to an input FASTA file to be read' )
     parser.add_argument('-fc', '--file_count', type=int, required=True, help='Number of files to split the records into' )
-    parser.add_argument('-o', '--output_directory', type=str, required=False, help='Directory where output will be written.  Default: input file location' )
+    parser.add_argument('-o', '--output_directory', type=str, required=False, help='Directory where output will be written.  Default: input file location')
     args = parser.parse_args()
 
     # First, we need to know how many entries are in the file
@@ -59,12 +37,18 @@ def main():
     print("INFO: There were {0} records found in the input file.".format(total_record_count))
     min_records_per_file = int(total_record_count / args.file_count)
     file_count_to_create = int(total_record_count / min_records_per_file)
-    print("INFO: {0} files will be created.".format(file_count_to_create))
+
+    # words matter
+    if file_count_to_create == 1:
+        print("INFO: {0} file will be created.".format(file_count_to_create))
+    else:
+        print("INFO: {0} files will be created.".format(file_count_to_create))
+
     print("INFO: Most files will have {0} records in each.".format(min_records_per_file))
 
     file_part_num = 1
     current_fragment_record_count = 0
-    current_fh = open("{0}/{1}.part{2}".format(output_dir, basename, file_part_num), 'w')
+    current_fh = open("{0}/part{1}_{2}".format(output_dir, file_part_num, basename), 'w')
 
     for line in open(args.input_file):
         if line.startswith(">"):
@@ -76,7 +60,7 @@ def main():
                     current_fh.close()
 
                 file_part_num += 1
-                current_fh = open("{0}/{1}.part{2}".format(output_dir, basename, file_part_num), 'w')
+                current_fh = open("{0}/part{1}_{2}".format(output_dir, file_part_num, basename), 'w')
                 current_fragment_record_count = 0
 
         current_fh.write(line)
@@ -86,10 +70,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
