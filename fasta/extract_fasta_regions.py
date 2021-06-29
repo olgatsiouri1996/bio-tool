@@ -39,17 +39,16 @@ Examples:
 
 '''
 
-import argparse
+from gooey import *
 import sys
-
 from biocode import utils
 
-
+@Gooey(required_cols=5, program_name= 'extract fasta regions', header_bg_color= '#DCDCDC', terminal_font_color= '#DCDCDC', terminal_panel_color= '#DCDCDC')
 def main():
-    parser = argparse.ArgumentParser( description='Extract regions from a multi-FASTA file')
+    parser = GooeyParser( description='Extract regions from a multi-FASTA file')
 
     ## output file to be written
-    parser.add_argument('-f', '--fasta_file', type=str, required=True, help='Path to an input FASTA file' )
+    parser.add_argument('-f', '--fasta_file', type=str, required=True, widget='FileChooser', help='Path to an input FASTA file' )
     parser.add_argument('-c', '--coords_file', type=str, required=True, help='Path to a tab-delimited file with coordinates' )
     parser.add_argument('-m', '--mol_col', type=int, required=True, help='Tabdel file column with molecule identifiers' )
     parser.add_argument('-x', '--start_coord_col', type=int, required=True, help='Tabdel file column with coordinate start positions' )

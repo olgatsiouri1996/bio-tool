@@ -29,18 +29,19 @@ A FASTA file containing the matching records.
 
 '''
 
-import argparse
+from gooey import *
 import os
 import re
 import sys
 
+@Gooey(required_cols=2, program_name= 'filter fasta by header regex', header_bg_color= '#DCDCDC', terminal_font_color= '#DCDCDC', terminal_panel_color= '#DCDCDC')
 def main():
-    parser = argparse.ArgumentParser( description='Split multi-FASTA file into separate protein and nucleotide files')
-
+    parser = GooeyParser( description='Split multi-FASTA file into separate protein and nucleotide files')
+   
     ## output file to be written
-    parser.add_argument('-i', '--input_file', type=str, required=True, help='Path to an input FASTA file' )
+    parser.add_argument('-i', '--input_file', type=str, required=True, widget='FileChooser', help='Path to an input FASTA file' )
     parser.add_argument('-o', '--output_file', type=str, required=False, help='Path to an output file to be created' )
-    parser.add_argument('-r', '--regex', type=str, required=True, help='Regular expression to match against each header' )
+    parser.add_argument('-r', '--regex', type=str, required=True,  help='Regular expression to match against each header' )
     args = parser.parse_args()
 
     if args.output_file is None:
