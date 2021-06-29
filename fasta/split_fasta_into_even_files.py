@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 """
 If you have a large FASTA file with a great number of entries, this script is used to
 split the file into multiple new files with an even number of records (or as close
