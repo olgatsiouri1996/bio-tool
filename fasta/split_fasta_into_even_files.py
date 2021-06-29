@@ -7,7 +7,7 @@ Use case example: I have a reference genome collection with 2000 genomes and wan
 search this using bowtie.  But the bowtie index memory footprint is too large for
 a large search, so I needed to split the reference genome file into 4 even parts
 and index them individually.
-The script uses the same file name as before but appends '.partN' where 'N' is replaced
+The script uses the same file name as before but with 'partN_' as prefix where 'N' is replaced
 by an increasing digit to indicate the file number.
 
 """
